@@ -5,7 +5,6 @@
 1. Download **Linux Mint Cinnamon 64-bit** from <https://linuxmint.com/download.php> (22.3 "Zena" used here, ~2.9 GB).
 2. Flash it to a USB stick (8 GB+, it gets erased).
    - **Rufus** (portable) worked reliably: choose **ISO mode**, and click **Yes** when it offers to download the matching Grub file.
-   - balenaEtcher froze with greyed-out buttons on this machine. If that happens, use Rufus.
 
 ## Boot the USB
 
