@@ -1,0 +1,53 @@
+# Place at /mnt/hdd/docker/compose.yaml
+# Run: cd /mnt/hdd/docker && docker compose up -d
+# Assumes your user id and group id are 1000 (check with: id -u && id -g)
+services:
+  portainer:
+    image: portainer/portainer-ce:lts
+    container_name: portainer
+    restart: unless-stopped
+    ports: ["9443:9443"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/hdd/appdata/portainer:/data
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    restart: unless-stopped
+    user: "1000:1000"
+    ports: ["8080:80"]
+    volumes:
+      - /mnt/hdd:/srv
+      - /mnt/hdd/appdata/filebrowser/database:/database
+      - /mnt/hdd/appdata/filebrowser/config:/config
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    environment: [PUID=1000, PGID=1000, TZ=Asia/Kolkata, WEBUI_PORT=8081]
+    ports: ["8081:8081", "6881:6881", "6881:6881/udp"]
+    volumes:
+      - /mnt/hdd/appdata/qbittorrent:/config
+      - /mnt/hdd/downloads:/downloads
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    user: "1000:1000"
+    ports: ["8096:8096"]
+    volumes:
+      - /mnt/hdd/appdata/jellyfin/config:/config
+      - /mnt/hdd/appdata/jellyfin/cache:/cache
+      - /mnt/hdd/media:/media
+
+  uptime-kuma:
+    # Use the :2 tag. ":latest" still points to the unmaintained v1 line.
+    image: louislam/uptime-kuma:2
+    container_name: uptime-kuma
+    restart: unless-stopped
+    ports: ["3001:3001"]
+    volumes:
+      - /mnt/hdd/appdata/uptime-kuma:/app/data
